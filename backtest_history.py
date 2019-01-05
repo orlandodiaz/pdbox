@@ -1,7 +1,7 @@
 import os
 import cPickle as pickle
 import pandas as pd
-from lib.log import log
+from log3 import log
 BACKTESTS_PATH = "bt_results/"
 
 backtest_log = pd.DataFrame(columns=

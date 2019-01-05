@@ -4,7 +4,7 @@ import datetime
 import os
 from datetime import datetime as dt
 import cPickle as pickle
-from lib.log import log
+from log3 import log
 from data_handler import add_columns
 
 
@@ -13,13 +13,12 @@ class Backtest(object):
     stocks_list = None
 
     def __init__(self, strategy, stock_list, **kwargs):
+        """
+        params:
+            strategy - Strategy class. Contains the buying and sellign conditions
+            stock_list - 2d List of stock dataframes
+        """
 
-        """
-        parameters:
-        ------------
-        strategy - Strategy class. Contains the buying and sellign conditions
-        stock_list - 2d List of stock dataframes
-        """
         # Initialize class variables
         Backtest.stocks_list = stock_list
 

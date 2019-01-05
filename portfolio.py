@@ -1,7 +1,4 @@
-"Unfortunate name"
-
-from lib.log import log
-
+from log3 import log
 
 class Portfolio(object):
 

@@ -1,4 +1,4 @@
-from data_handler import read_csv_df, correct_csv_df, add_columns
+from data_handler import make_dataframe_from_csv, correct_csv_df, add_columns
 from backtest import Backtest
 from portfolio import Portfolio
 from strategies.sma_crossover import SMACrossOver
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     futures = []
     for ticker in my_portfolio.tickers:
         try:
-            data = futures.append([ticker, pool.submit(read_csv_df, ticker)])
+            data = futures.append([ticker, pool.submit(make_dataframe_from_csv, ticker)])
         except Exception as ex:
             print ex
             continue

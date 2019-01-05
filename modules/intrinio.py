@@ -1,4 +1,4 @@
-from lib.log import log
+from log3 import log
 import requests
 import cPickle as pickle
 

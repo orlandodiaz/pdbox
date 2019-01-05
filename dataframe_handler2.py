@@ -1,5 +1,5 @@
 import time
-from data_handler import read_csv_df, correct_csv_df, add_columns
+from data_handler import make_dataframe_from_csv, correct_csv_df, add_columns
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import ProcessPoolExecutor
 from portfolio import Portfolio
@@ -20,7 +20,7 @@ class DataframeHandler(object):
         futures = []
         for ticker in portfolio.tickers:
             try:
-                data = futures.append([ticker, pool.submit(read_csv_df, ticker)])
+                data = futures.append([ticker, pool.submit(make_dataframe_from_csv, ticker)])
             except Exception as ex:
                 print "Exception ocurred: {0}".format(ex)
                 continue

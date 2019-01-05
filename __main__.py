@@ -16,16 +16,16 @@ if __name__ == '__main__':
 
     #tickers = ['GBR']
     #tickers = ['SRAX','KOOL','DYSL']
-    #tickers = ['AAPL, MSFT, TWTR']
+    # tickers = ['AAPL, MSFT, TWTR']
     # tickers =  ['ONP', 'CNET', 'RCON', 'CREG']
-    # tickers = ['ONP', 'CNET', 'RCON', 'CREG', 'AMMA', 'SRAX', 'DYSL', 'OPTT', 'KOOL', 'ONTX', 'CLNT', 'CMLS', 'APHB', 'ISIG',
-    #        'CBIO', 'STAF', 'SSI', 'ONCS', 'QRHC', 'SKLN', 'CNIT', 'BONT', 'EVEP', 'MLSS', 'ENRJ', 'LIQT', 'MOSY', 'SMIT',
-    #        'CRTN', 'ITEK', 'ARGS', 'LTRX', 'MICT', 'IGC', 'NEOT', 'SSKN', 'ABIO', 'OPGN', 'USEG', 'TST', 'NURO', 'TTNP',
-    #        'DRIO', 'PZRX', 'AKER', 'YECO']
+    tickers = ['ONP', 'CNET', 'RCON', 'CREG', 'AMMA', 'SRAX', 'DYSL', 'OPTT', 'KOOL', 'ONTX', 'CLNT', 'CMLS', 'APHB', 'ISIG',
+           'CBIO', 'STAF', 'SSI', 'ONCS', 'QRHC', 'SKLN', 'CNIT', 'BONT', 'EVEP', 'MLSS', 'ENRJ', 'LIQT', 'MOSY', 'SMIT',
+           'CRTN', 'ITEK', 'ARGS', 'LTRX', 'MICT', 'IGC', 'NEOT', 'SSKN', 'ABIO', 'OPGN', 'USEG', 'TST', 'NURO', 'TTNP',
+           'DRIO', 'PZRX', 'AKER', 'YECO']
     #intrinio = Intrinio()
     #tickers = intrinio.get_stocks()
 
-    tickers = pickle.load(open("pickles/stocks_less_than_500m.p", "rb"))
+    # tickers = pickle.load(open("pickles/stocks_less_than_500m.p", "rb"))
     #tickers = tickers[:400]
 
     # Create portfolio

@@ -1,18 +1,30 @@
 
-# Data handler module
+"""
+This file has utilities that are used in the backtesting process
+
+"""
+
 
 import talib as ta
 import numpy as np
 import datetime
 import pandas as pd
-from lib.log import log
+from log3 import log
 
 # Pandas output settings
 pd.set_option('expand_frame_repr', False)
 pd.set_option('display.max_rows', 2000)
 
 
-def read_csv_df(ticker):
+def make_dataframe_from_csv(ticker):
+    """
+
+    Args:
+        ticker (str):
+
+    Returns:
+
+    """
 
     # Path for the ticker Kibot data
     path = '/Users/system-void/gdrive/code/data/stocks/5min/%s.txt' % ticker
@@ -43,15 +55,23 @@ def correct_csv_df(csv_df):
 
         return csv_df
 
-# Warning. Combining Alphavantage's API with previous historical will cause issues.
-# Since alphavantage's data is adjusted every day and your other data ir probably not.
+
 def combine_csv_with_av(csv_df, av_df):
+    """ Combines local dataframe from csv with Alphavantage's dataframes
+
+    Args:
+        csv_df: Kibot's csv dataframe
+        av_df:  Alphavantage dataframe with correct types and datetime as index
+
+    Returns:
+        Combined dataframe from both Kibot's csv file andd Alphavantage's time-series API
+
+    Warning. Combining Alphavantage's API with previous historical will cause issues.
+    Since alphavantage's data is adjusted every day and your other data is probably not.
+    Note this is missing pre-market and after-market data.
+
     """
-    :param Kibot's csv dataframe:
-    :param Alphavantage dataframe with correct types and datetime as index:
-    :return: Combined dataframe from both Kibot's csv file andd Alphavantage's time-series API.
-     Note this is missing pre-market and after-market data.
-    """
+
     combined_df = pd.concat([csv_df, av_df], axis=0)
     combined_df = combined_df.sort_index()
 
@@ -59,6 +79,15 @@ def combine_csv_with_av(csv_df, av_df):
 
 
 def resample_df(df, interval):
+    """ Resamples dataframe to use either 2min, 5min, 1hour, daily, or weekly bar
+    Args:
+        df:
+        interval: Either 2min, 5min, 1hour, daily, or weekly
+
+    Returns:
+
+    """
+
     params = ['2min', '5min', '1hour', 'daily', 'weekly']
     if interval in params:
         conversion = {'open': 'first', 'high': 'max','low': 'min', 'close': 'last', 'volume': 'sum'}
@@ -71,6 +100,15 @@ def resample_df(df, interval):
 
 
 def add_columns(df):
+    """ Add columns of interest  to dataframes
+
+    Args:
+        df: Combined dataframe from both Kibot and AlphaVantage
+
+    Returns:
+        df: Returns dataframe with all extra columns of interest such as indicators, etc
+
+    """
 
     df['sma100'] = df['close'].rolling(window=100).mean()
     df['sma400'] = df['close'].rolling(window=400).mean()

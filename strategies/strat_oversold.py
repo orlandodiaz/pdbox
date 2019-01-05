@@ -1,5 +1,5 @@
 from strategy import *
-from lib.log import log
+from log3 import log
 
 class OversoldMorning(Strategy):
     def __init__(self, name):
