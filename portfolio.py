@@ -1,4 +1,7 @@
 from log3 import log
+from settings import PATH_TO_STOCKS_FOLDER
+import os
+
 
 class Portfolio(object):
 
@@ -36,11 +39,15 @@ class Portfolio(object):
         """
 
         for ticker in tickers[:]:
-            path = '/Users/system-void/gdrive/code/data/stocks/5min/%s.txt' % ticker
+            path = os.path.join(PATH_TO_STOCKS_FOLDER, '%s.txt' % ticker)
+
+            # path = '/Users/system-void/gdrive/code/data/stocks/5min/%s.txt' % ticker
             try:
                 # Get the size (lines) of file (must open file)
                 size = sum(1 for l in open(path))
             except Exception as ex:
-                log.info('%7s - Ticker not found in local equity database. Removing from portfolio' % ticker)
+                log.info(
+                    '%7s - Ticker not found in local equity database. Removing from portfolio'
+                    % ticker)
                 #print ex
                 self.tickers.remove(ticker)

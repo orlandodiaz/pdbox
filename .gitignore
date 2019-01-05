@@ -3,3 +3,5 @@ pickles/
 logs/
 screener_results/
 *.log
+strategies/strat_overbought.py
+strategies/strat_oversold.py

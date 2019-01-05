@@ -10,6 +10,7 @@ from portfolio import Portfolio
 import datetime
 from log3 import log
 
+
 def th_run(my_portfolio):
     """ Runs make_dataframe_from_csv for all tickers in portfolio
      and returns it in a future
@@ -21,12 +22,14 @@ def th_run(my_portfolio):
 
     """
 
-
-    pool = ThreadPoolExecutor(len(my_portfolio.tickers))  # for many urls, this should probably be capped at some value.
+    pool = ThreadPoolExecutor(
+        len(my_portfolio.tickers
+           ))  # for many urls, this should probably be capped at some value.
     futures = []
     for ticker in my_portfolio.tickers:
         try:
-            data = futures.append([ticker, pool.submit(make_dataframe_from_csv, ticker)])
+            data = futures.append(
+                [ticker, pool.submit(make_dataframe_from_csv, ticker)])
         except Exception as ex:
             print "Exception ocurred: {0}".format(ex)
             continue
@@ -40,19 +43,23 @@ def mp_worker(ticker, data):
     try:
         csv_df = data
         csv_df = correct_csv_df(csv_df)
-        csv_df =  csv_df.ix[csv_df.index.indexer_between_time(datetime.time(9,30), datetime.time(16))]
+        csv_df = csv_df.ix[csv_df.index.indexer_between_time(
+            datetime.time(9, 30), datetime.time(16))]
         csv_df = add_columns(csv_df)
     except Exception as ex:
         print ex
 
     else:
-        log.info('%7s - Worker has corrected CSV file and added the appropriate columns' % ticker)
+        log.info(
+            '%7s - Worker has corrected CSV file and added the appropriate columns'
+            % ticker)
         return csv_df
 
 
 def mp_run(futures):
 
-    process_pool = ProcessPoolExecutor(7)  # for many urls, this should probably be capped at some value.
+    process_pool = ProcessPoolExecutor(
+        7)  # for many urls, this should probably be capped at some value.
     mp_futures = []
 
     for future in futures:
@@ -64,11 +71,13 @@ def mp_run(futures):
             print ex
             continue
         else:
-            mp_futures.append([ticker, process_pool.submit(mp_worker, ticker, data)])
+            mp_futures.append(
+                [ticker, process_pool.submit(mp_worker, ticker, data)])
 
     time.sleep(5)
 
     return mp_futures
+
 
 def create_stocks(mp_futures):
     """ Not sure what this does
@@ -109,14 +118,13 @@ def build_dataframes(my_portfolio):
 
 
 if __name__ == '__main__':
-    ticker = ['CLNT' ,'ANV']
+    ticker = ['CLNT', 'ANV']
     my_portfolio = Portfolio(ticker, "test")
     futures = th_run(my_portfolio)
     mp_futures = mp_run(futures)
 
     log.debug('Pickling stock list')
     #pickle.dump(mp_futures, open('pickles/stock_list', 'wb'))
-
 
 # stocks = []
 # for ticker in my_portfolio.tickers:
@@ -130,4 +138,3 @@ if __name__ == '__main__':
 #         csv_df = correct_csv_df(csv_df)
 #         csv_df = add_columns(csv_df)
 #         stocks.append([ticker, csv_df])
-

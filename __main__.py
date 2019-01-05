@@ -18,10 +18,14 @@ if __name__ == '__main__':
     #tickers = ['SRAX','KOOL','DYSL']
     # tickers = ['AAPL, MSFT, TWTR']
     # tickers =  ['ONP', 'CNET', 'RCON', 'CREG']
-    tickers = ['ONP', 'CNET', 'RCON', 'CREG', 'AMMA', 'SRAX', 'DYSL', 'OPTT', 'KOOL', 'ONTX', 'CLNT', 'CMLS', 'APHB', 'ISIG',
-           'CBIO', 'STAF', 'SSI', 'ONCS', 'QRHC', 'SKLN', 'CNIT', 'BONT', 'EVEP', 'MLSS', 'ENRJ', 'LIQT', 'MOSY', 'SMIT',
-           'CRTN', 'ITEK', 'ARGS', 'LTRX', 'MICT', 'IGC', 'NEOT', 'SSKN', 'ABIO', 'OPGN', 'USEG', 'TST', 'NURO', 'TTNP',
-           'DRIO', 'PZRX', 'AKER', 'YECO']
+    tickers = [
+        'ONP', 'CNET', 'RCON', 'CREG', 'AMMA', 'SRAX', 'DYSL', 'OPTT', 'KOOL',
+        'ONTX', 'CLNT', 'CMLS', 'APHB', 'ISIG', 'CBIO', 'STAF', 'SSI', 'ONCS',
+        'QRHC', 'SKLN', 'CNIT', 'BONT', 'EVEP', 'MLSS', 'ENRJ', 'LIQT', 'MOSY',
+        'SMIT', 'CRTN', 'ITEK', 'ARGS', 'LTRX', 'MICT', 'IGC', 'NEOT', 'SSKN',
+        'ABIO', 'OPGN', 'USEG', 'TST', 'NURO', 'TTNP', 'DRIO', 'PZRX', 'AKER',
+        'YECO'
+    ]
     #intrinio = Intrinio()
     #tickers = intrinio.get_stocks()
 
@@ -35,7 +39,8 @@ if __name__ == '__main__':
     my_portfolio.blacklist(['BURG', 'CVM.W', 'AGM.A'])
 
     # Create dataframes from portfolio. Uses threads and multiprocessing
-    stocks = build_dataframes(my_portfolio)  # => weird multidimensional list of stocks
+    stocks = build_dataframes(
+        my_portfolio)  # => weird multidimensional list of stocks
 
     # Load strategies
     # strategy = OverboughtMorning('Overbought Morning')

@@ -39,8 +39,8 @@ class Backtest(object):
         # These are the default values for the backtest. It backtests 1 month back by default.
         self.buy_start = '2017-11-01'
         self.buy_end = '2017-12-05'
-        self.time_frame = "{0}:{1}".format(self.buy_start,self.buy_end)
-        
+        self.time_frame = "{0}:{1}".format(self.buy_start, self.buy_end)
+
         # Checkers
         self._is_done = False
 
@@ -68,11 +68,11 @@ class Backtest(object):
         else:
             self.note = ""
 
-        
         # Other
-        self.trade_log = pd.DataFrame(columns=
-            ['buy_date', 'ticker', 'buy_price', 'sell_date','sell_price','volume'])
-
+        self.trade_log = pd.DataFrame(columns=[
+            'buy_date', 'ticker', 'buy_price', 'sell_date', 'sell_price',
+            'volume'
+        ])
 
     def disable_extended_hours(self):
         self.extended_hours = False
@@ -103,7 +103,8 @@ class Backtest(object):
         # print('{0} backtester5:\t {1}\t operated by PID: {2}'.format(str(dt.now().time())[:8], ticker, proc))
 
         if self.extended_hours is False:
-            df = df.ix[df.index.indexer_between_time(datetime.time(9,30), datetime.time(16))]
+            df = df.ix[df.index.indexer_between_time(
+                datetime.time(9, 30), datetime.time(16))]
         else:
             pass
 
@@ -111,7 +112,9 @@ class Backtest(object):
         # df = add_columns(df)
 
         # Buying range: Date must be the index
-        df = df.loc['{buy_start} 9:30'.format(buy_start=self.buy_start):'{buy_end} 16:00'.format(buy_end=self.buy_end)]
+        df = df.loc['{buy_start} 9:30'.format(
+            buy_start=self.buy_start):'{buy_end} 16:00'.format(
+                buy_end=self.buy_end)]
 
         df = df.reset_index()
         df = df.rename({'index': 'date'}, axis='columns')
@@ -122,17 +125,20 @@ class Backtest(object):
 
         # self.strategy.check_for_conditions(self, df, ticker, index_array)
 
-        trade_row = pd.DataFrame(columns=
-                                 ['index', 'buy_date','ticker','buy_price', 'sell_date','sell_price', 'volume'])
+        trade_row = pd.DataFrame(columns=[
+            'index', 'buy_date', 'ticker', 'buy_price', 'sell_date',
+            'sell_price', 'volume'
+        ])
         for index in index_array:
             # Store the close as the buying price
             buy_price = df.iloc[index]['close']
             buy_date = df.iloc[index]['date']
 
-            init = int(index) # Initial value
+            init = int(index)  # Initial value
             volume = df.iloc[index]['volume']
 
-            sell_date, sell_price = self.strategy.sell_algorithm(init, ticker, df)
+            sell_date, sell_price = self.strategy.sell_algorithm(
+                init, ticker, df)
 
             sell_date = sell_date
             sell_price = sell_price
@@ -140,19 +146,23 @@ class Backtest(object):
             # print "inside loop %.4f" % sell_date
             # print "inside loop %.4f" % sell_price
 
-            log.info('%7s - Bought @ %.3f at LOC: %d ' % (ticker, buy_price, index))
+            log.info(
+                '%7s - Bought @ %.3f at LOC: %d ' % (ticker, buy_price, index))
 
-           # print "%s backtester2: \t %s \t BUY  @ %.3f\t LOC: %d" % \
-           #       (dt.now().strftime("%H:%M:%S"), ticker, buy_price, index)
+            # print "%s backtester2: \t %s \t BUY  @ %.3f\t LOC: %d" % \
+            #       (dt.now().strftime("%H:%M:%S"), ticker, buy_price, index)
 
             if sell_date or sell_price != 0:
-                trade_row.loc[trade_row.__len__()]=[index, buy_date, ticker, buy_price, sell_date, sell_price, volume]
+                trade_row.loc[trade_row.__len__()] = [
+                    index, buy_date, ticker, buy_price, sell_date, sell_price,
+                    volume
+                ]
 
         if len(index_array) == 0:
             current2_time = str(dt.now().time())[:8]
 
-            log.info('%7s - Operation by PID %s. Task completed in %s' % (ticker, proc, time.time() - then))
-
+            log.info('%7s - Operation by PID %s. Task completed in %s' %
+                     (ticker, proc, time.time() - then))
 
             # print('{0}\t Ticker {1} being operated on by process id: {2}'.format(current2_time, ticker, proc)),
             # print "%s backtester2: \t %s \t Task completed in:  %s" \
@@ -160,7 +170,8 @@ class Backtest(object):
 
         else:
 
-            log.info('%7s - Operation by PID %s. Task completed in %s' % (ticker, proc, time.time() - then))
+            log.info('%7s - Operation by PID %s. Task completed in %s' %
+                     (ticker, proc, time.time() - then))
 
             # print "%s backtester2: \t %s \t Task completed in:  %s" \
             #      % (dt.now().strftime("%H:%M:%S"), ticker, time.time() - then)
@@ -184,33 +195,43 @@ class Backtest(object):
 
     def save_results(self):
 
-        self.trade_log['diff'] = self.trade_log['sell_price'] - self.trade_log['buy_price']
-        self.trade_log['pct_change'] = (self.trade_log['diff'] / self.trade_log['buy_price']) * 100
+        self.trade_log[
+            'diff'] = self.trade_log['sell_price'] - self.trade_log['buy_price']
+        self.trade_log['pct_change'] = (
+            self.trade_log['diff'] / self.trade_log['buy_price']) * 100
         self.trade_log = self.trade_log.sort_values('buy_date')
 
         if self.strategy.direction == "short":
-            self.winners =  len(self.trade_log[(self.trade_log['pct_change'] < 0)])
-            self.losers = len(self.trade_log[(self.trade_log['pct_change'] > 0)])
+            self.winners = len(
+                self.trade_log[(self.trade_log['pct_change'] < 0)])
+            self.losers = len(
+                self.trade_log[(self.trade_log['pct_change'] > 0)])
         elif self.strategy.direction == "long":
-            self.winners = len(self.trade_log[(self.trade_log['pct_change'] > 0)])
-            self.losers = len(self.trade_log[(self.trade_log['pct_change'] < 0)])
+            self.winners = len(
+                self.trade_log[(self.trade_log['pct_change'] > 0)])
+            self.losers = len(
+                self.trade_log[(self.trade_log['pct_change'] < 0)])
         else:
-            raise ValueError('Invalid position type. Strategy position type must be "short" or "long"')
+            raise ValueError(
+                'Invalid position type. Strategy position type must be "short" or "long"'
+            )
 
-     #   self.short_losers = len(self.trade_log[(self.trade_log['pct_change'] > 0)])
+    #   self.short_losers = len(self.trade_log[(self.trade_log['pct_change'] > 0)])
 
         self.pct_chg_avg = self.trade_log['pct_change'].mean()
 
-
         if self.winners and self.losers != 0:
-            self.winning_percent = (float(self.winners) / (self.losers + self.winners) * 100)
+            self.winning_percent = (
+                float(self.winners) / (self.losers + self.winners) * 100)
         else:
             self.winning_percent = 0
 
     def pickle_results(self):
         pickle_name = self.strategy.name
         pickle_name = pickle_name.lower().replace(' ', '_')
-        f = open("bt_results/{0}-{1}".format(self.timestamp.replace(' ', '-'), pickle_name), "wb")
+        f = open(
+            "bt_results/{0}-{1}".format(
+                self.timestamp.replace(' ', '-'), pickle_name), "wb")
 
         log.info("Pickling backtesting object")
         pickle.dump(self, f)
@@ -218,7 +239,8 @@ class Backtest(object):
 
     def print_results(self):
         print
-        print 'strategy: {0}\t Time: {1}\t Stocks: {2}'.format(self.strategy.name, self.time_frame, self.num_of_stocks)
+        print 'strategy: {0}\t Timeframe: {1}\t Stocks: {2}'.format(
+            self.strategy.name, self.time_frame, self.num_of_stocks)
         print '-------------------------------------------------------------------------------------------------------'
 
         print self.trade_log
@@ -227,20 +249,20 @@ class Backtest(object):
 
         print 'Winning trades: {0}'.format(self.winners)
         print 'Losing trades: ', self.losers
-#        print 'Winning percent', self.winners / (self.losers + self.winners)
+        #        print 'Winning percent', self.winners / (self.losers + self.winners)
 
-       #  print 'Long trategy:'
-       #  print '-------------'
-       #  print 'Winning trades: {0}'.format(self.long_winners)
-       #  print 'Losing trades: ', self.long_losers
-       # # print 'Winning percent', self.long_winners / (self.long_losers + self.long_winners)
-       #  print
-       #
-       #  print 'Short Strategy'
-       #  print '--------------'
-       #  print 'Winning trades: ', self.short_winners
-       #  print 'Losing trades: ', self.short_losers
-       #  print "Winning percent: %.1f %%" % self.winning_percent
+        #  print 'Long trategy:'
+        #  print '-------------'
+        #  print 'Winning trades: {0}'.format(self.long_winners)
+        #  print 'Losing trades: ', self.long_losers
+        # # print 'Winning percent', self.long_winners / (self.long_losers + self.long_winners)
+        #  print
+        #
+        #  print 'Short Strategy'
+        #  print '--------------'
+        #  print 'Winning trades: ', self.short_winners
+        #  print 'Losing trades: ', self.short_losers
+        #  print "Winning percent: %.1f %%" % self.winning_percent
 
         print 'pct_change avg: ', self.pct_chg_avg
 

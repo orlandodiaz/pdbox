@@ -1,4 +1,3 @@
-
 """
 This file has utilities that are used in the backtesting process
 
@@ -9,6 +8,8 @@ import numpy as np
 import datetime
 import pandas as pd
 from log3 import log
+from settings import PATH_TO_STOCKS_FOLDER
+import os
 
 # Pandas output settings
 pd.set_option('expand_frame_repr', False)
@@ -27,7 +28,10 @@ def make_dataframe_from_csv(ticker):
     """
 
     # Path for the ticker Kibot data
-    path = '/Users/system-void/gdrive/code/data/stocks/5min/%s.txt' % ticker
+
+    path = os.path.join(PATH_TO_STOCKS_FOLDER, '%s.txt' % ticker)
+
+    # path = '/Users/system-void/gdrive/code/data/stocks/5min/%s.txt' % ticker
 
     try:
         # Get the size (lines) of file (must open file)
@@ -38,7 +42,9 @@ def make_dataframe_from_csv(ticker):
         # raise ValueError('Invalid path to stock files')
     else:
         log.info('%7s - Loading history into memory' % ticker)
-        csv_df = pd.read_csv(path, skiprows=range(1, size - 7500))  # Read only the last 7500 lines of the csv
+        csv_df = pd.read_csv(
+            path, skiprows=range(
+                1, size - 7500))  # Read only the last 7500 lines of the csv
         return csv_df
 
 
@@ -100,13 +106,21 @@ def resample_df(df, interval):
 
     params = ['2min', '5min', '1hour', 'daily', 'weekly']
     if interval in params:
-        conversion = {'open': 'first', 'high': 'max','low': 'min', 'close': 'last', 'volume': 'sum'}
+        conversion = {
+            'open': 'first',
+            'high': 'max',
+            'low': 'min',
+            'close': 'last',
+            'volume': 'sum'
+        }
 
         # Do the conversion
-       # df = df.resample('60Min', how=conversion)
+    # df = df.resample('60Min', how=conversion)
 
     else:
-        raise ValueError('The interval you specified was not in the list of allowed intervals.')
+        raise ValueError(
+            'The interval you specified was not in the list of allowed intervals.'
+        )
 
 
 def add_columns(df):
@@ -139,7 +153,6 @@ def add_columns(df):
 
     df['rel_vol_100p'] = df['volume'] / (vol_sum / 100)
 
-
     # df['rel_vol_20p_2'] = df['volume'] / df['volume'].rolling(window=20).mean()
 
     # df['rel_vol_100p'] = df['volume'] / (vol_sum / 100)
@@ -166,11 +179,12 @@ def add_columns(df):
     # Add column for relative difference between current CloseOpenDiff and previous windows
     cod_sum = 0
     for i in range(1, 15):
-       cod_sum = cod_sum + df['close_open_diff'].shift(i)
+        cod_sum = cod_sum + df['close_open_diff'].shift(i)
 
     df['rel_close_open_diff'] = df['close_open_diff'] / (cod_sum / 15)
 
-    df['rel_close_open_diff2'] = df['close_open_diff'] / df['close_open_diff'].shift(i).rolling(window=14).mean()
+    df['rel_close_open_diff2'] = df['close_open_diff'] / df[
+        'close_open_diff'].shift(i).rolling(window=14).mean()
 
     # Calculates the highest close based on the amount of data we have
     df['1250_window_high'] = df['close'].rolling(window=1250).max().shift(1)
@@ -178,14 +192,15 @@ def add_columns(df):
     # Calculates the highest close based on the amount of data we have. 110 gives us better results than 100
     df['4mo_high'] = df['close'].rolling(window="110D").max().shift(1)
 
+    df['7dayMaxVol'] = df['volume'].rolling(window=300).max().shift(
+        1)  # approximately 2 days
 
-    df['7dayMaxVol'] = df['volume'].rolling(window=300).max().shift(1) # approximately 2 days
-
-    df['14period_max_vol'] = df['volume'].rolling(window=30).max().shift(1) # 3 bars behind
+    df['14period_max_vol'] = df['volume'].rolling(window=30).max().shift(
+        1)  # 3 bars behind
 
     df['ema_deviation'] = df['close'] / df['ema13']
 
-    df['pct_change'] = ((df['close'] - df['open'])  / df['open']) * 100
+    df['pct_change'] = ((df['close'] - df['open']) / df['open']) * 100
 
     df['avg_vol_14d'] = df['volume'].rolling(window="14D").mean().shift(1)
     #df['avg_vol_50d'] = df['volume'].rolling(window="50D").mean().shift(1)
@@ -193,16 +208,17 @@ def add_columns(df):
     # df['rel_close_max_diff'] = df['close'] / df['1250_window_high']
 
     # Row which includes the open for the current day
-    df['day_open'] = df.ix[df.index.indexer_between_time(datetime.time(9,30), datetime.time(9,30))]['open']
+    df['day_open'] = df.ix[df.index.indexer_between_time(
+        datetime.time(9, 30), datetime.time(9, 30))]['open']
     df = df.fillna(method='ffill')
     #
-    df['chg_since_open'] = ((df['open'] - df['day_open']) / df['day_open']) * 100
+    df['chg_since_open'] = (
+        (df['open'] - df['day_open']) / df['day_open']) * 100
 
     df['adx'] = \
         ta.ADX(np.asarray(df['high']),
                np.asarray(df['low']),
                np.asarray(df['close']),
                timeperiod=14)
-
 
     return df
