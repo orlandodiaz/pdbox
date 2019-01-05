@@ -8,3 +8,4 @@ strategies/strat_oversold.py
 .idea/
 *.log
 *.pyc
+*.DS_Store
