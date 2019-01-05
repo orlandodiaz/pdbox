@@ -2,7 +2,6 @@
 It uses a combination of threading and multiprocessing to get the job done
 """
 
-
 import time
 from data_handling_utils import make_dataframe_from_csv, correct_csv_df, add_columns
 from concurrent.futures import ThreadPoolExecutor
@@ -21,6 +20,7 @@ def th_run(my_portfolio):
         Future with all dataframes for all given tickers
 
     """
+
 
     pool = ThreadPoolExecutor(len(my_portfolio.tickers))  # for many urls, this should probably be capped at some value.
     futures = []
@@ -109,7 +109,7 @@ def build_dataframes(my_portfolio):
 
 
 if __name__ == '__main__':
-    ticker = ['CLNT']
+    ticker = ['CLNT' ,'ANV']
     my_portfolio = Portfolio(ticker, "test")
     futures = th_run(my_portfolio)
     mp_futures = mp_run(futures)
