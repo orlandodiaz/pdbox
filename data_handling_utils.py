@@ -4,7 +4,6 @@ This file has utilities that are used in the backtesting process
 
 """
 
-
 import talib as ta
 import numpy as np
 import datetime
@@ -17,12 +16,13 @@ pd.set_option('display.max_rows', 2000)
 
 
 def make_dataframe_from_csv(ticker):
-    """
+    """ Creates initial datafarme from ticker csv/txt file
 
     Args:
-        ticker (str):
+        ticker (str): Ticker of the stock
 
     Returns:
+        csv_df: Dumb Pandas dataframe of the stock. Each column is a string
 
     """
 
@@ -43,17 +43,27 @@ def make_dataframe_from_csv(ticker):
 
 
 def correct_csv_df(csv_df):
-        # Putting in a format increases performance drastically
-        csv_df['date'] = pd.to_datetime(csv_df['date'], format="%m/%d/%Y %H:%M")
+    """ Corrects the pandas dataframe so that each column has the correct type
 
-        csv_df = csv_df.infer_objects()
-        csv_df = csv_df.set_index('date')
-        csv_df = csv_df.shift(1)
+    Args:
+        csv_df: Dumb pandas dataframe
 
-        # Remove that first row
-        csv_df = csv_df.drop(csv_df.index[:1])
+    Returns:
+        csv_df: Corrected pandas dataframe with correct type
 
-        return csv_df
+    """
+
+    # Putting in a format increases performance drastically
+    csv_df['date'] = pd.to_datetime(csv_df['date'], format="%m/%d/%Y %H:%M")
+
+    csv_df = csv_df.infer_objects()
+    csv_df = csv_df.set_index('date')
+    csv_df = csv_df.shift(1)
+
+    # Remove that first row
+    csv_df = csv_df.drop(csv_df.index[:1])
+
+    return csv_df
 
 
 def combine_csv_with_av(csv_df, av_df):
@@ -100,7 +110,7 @@ def resample_df(df, interval):
 
 
 def add_columns(df):
-    """ Add columns of interest  to dataframes
+    """ Add columns of interest to a dataframe
 
     Args:
         df: Combined dataframe from both Kibot and AlphaVantage
