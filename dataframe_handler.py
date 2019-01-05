@@ -1,3 +1,8 @@
+""" This s file is very weird as it was written in 2017
+It uses a combination of threading and multiprocessing to get the job done
+"""
+
+
 import time
 from data_handler import make_dataframe_from_csv, correct_csv_df, add_columns
 from concurrent.futures import ThreadPoolExecutor
@@ -5,9 +10,17 @@ from concurrent.futures import ProcessPoolExecutor
 from portfolio import Portfolio
 import datetime
 from log3 import log
-import pickle
 
 def th_run(my_portfolio):
+    """ Runs make_dataframe_from_csv for all tickers in portfolio
+     and returns it in a future
+    Args:
+        my_portfolio (Portfolio): List of stocks. Has to be of type Portfolio
+
+    Returns:
+        Future with all dataframes for all given tickers
+
+    """
 
     pool = ThreadPoolExecutor(len(my_portfolio.tickers))  # for many urls, this should probably be capped at some value.
     futures = []
@@ -58,6 +71,14 @@ def mp_run(futures):
     return mp_futures
 
 def create_stocks(mp_futures):
+    """ Not sure what this does
+
+    Args:
+        mp_futures:
+
+    Returns:
+
+    """
 
     stocks = []
 
@@ -73,6 +94,13 @@ def create_stocks(mp_futures):
 
 
 def build_dataframes(my_portfolio):
+    """
+    Args:
+        my_portfolio:
+
+    Returns:
+
+    """
     print "Loading stocks into memory"
     futures = th_run(my_portfolio)
     mp_futures = mp_run(futures)

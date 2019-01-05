@@ -14,15 +14,17 @@ class Backtest(object):
 
     def __init__(self, strategy, stock_list, **kwargs):
         """
-        params:
-            strategy - Strategy class. Contains the buying and sellign conditions
-            stock_list - 2d List of stock dataframes
+
+        Args:
+            strategy (Strategy): algorithm trading strategy. Must be of type Strategy
+            stock_list: 2d List of stock dataframes
+            **kwargs:
         """
 
         # Initialize class variables
         Backtest.stocks_list = stock_list
 
-        # Arguments passed
+        # Save Arguments passed
         self.strategy = strategy
         self.num_of_stocks = len(stock_list)
 
@@ -60,6 +62,7 @@ class Backtest(object):
 
         self.timestamp = str(dt.now())[:16]
 
+        # Optional note to use that will be displayed in the pandas dataframe result dataframe
         if 'note' in kwargs:
             self.note = kwargs['note']
         else:
