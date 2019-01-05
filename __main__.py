@@ -7,7 +7,7 @@ from strategies.buy_randomly import BuyRandomly
 import cPickle as pickle
 from backtest_history import get_backtests
 from dataframe_handler import build_dataframes
-from modules.intrinio import Intrinio
+from IntrinioPy.intrinio import Intrinio
 from strategies.strat_adx import ADXStrat
 
 if __name__ == '__main__':
