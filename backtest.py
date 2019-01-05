@@ -5,7 +5,7 @@ import os
 from datetime import datetime as dt
 import cPickle as pickle
 from log3 import log
-from data_handler import add_columns
+from data_handling_utils import add_columns
 
 
 class Backtest(object):
