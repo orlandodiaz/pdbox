@@ -1,5 +1,5 @@
 from backtest.backtest import Backtest
-from backtest.portfolio import Portfolio
+from backtest.universe import Universe
 from strategies.strat_oversold import OversoldMorning
 from backtest.backtest_history import get_backtests
 from backtest.dataframe_handler import build_dataframes
@@ -15,20 +15,20 @@ if __name__ == '__main__':
         'YECO'
     ]
     # intrinio = Intrinio()
-    #tickers = intrinio.get_stocks()
+    # tickers = intrinio.get_stocks()
 
     # tickers = pickle.load(open("pickles/stocks_less_than_500m.p", "rb"))
     #tickers = tickers[:400]
 
-    # Create portfolio
-    my_portfolio = Portfolio(tickers, "Normal < 200m")
+    # Create universe
+    my_universe = Universe(tickers, "Normal < 200m")
 
     # Blacklist certain stocks
-    my_portfolio.blacklist(['BURG', 'CVM.W', 'AGM.A'])
+    my_universe.blacklist(['BURG', 'CVM.W', 'AGM.A'])
 
-    # Create dataframes from portfolio. Uses threads and multiprocessing
+    # Create dataframes from universe. Uses threads and multiprocessing
     stocks = build_dataframes(
-        my_portfolio)  # => weird multidimensional list of stocks
+        my_universe)  # => weird multidimensional list of stocks
 
     # Load strategies
 

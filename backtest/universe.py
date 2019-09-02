@@ -3,7 +3,7 @@ from settings import PATH_TO_STOCKS_FOLDER
 import os
 
 
-class Portfolio(object):
+class Universe(object):
 
     def __init__(self, tickers, name):
         self.tickers = tickers
@@ -26,12 +26,12 @@ class Portfolio(object):
 
     def add_ticker(self, ticker):
         """
-        Add a specific ticker to your Portfolio
+        Add a specific ticker to your Universe
         """
         pass
 
     def remove_tickers_not_in_local_db(self, tickers):
-        """ Check if each ticker is in the local database. If not remove it from portfolio
+        """ Check if each ticker is in the local database. If not remove it from universe
 
         Args:
             tickers (list): Check if tickers exists locally
@@ -47,7 +47,7 @@ class Portfolio(object):
                 size = sum(1 for l in open(path))
             except Exception as ex:
                 log.info(
-                    '%7s - Ticker not found in local equity database. Removing from portfolio'
+                    '%7s - Ticker not found in local equity database. Removing from universe'
                     % ticker)
                 #print ex
                 self.tickers.remove(ticker)
