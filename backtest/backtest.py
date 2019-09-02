@@ -5,7 +5,7 @@ import os
 from datetime import datetime as dt
 import cPickle as pickle
 from log3 import log
-from data_handling_utils import add_columns
+from utils import add_columns
 
 
 class Backtest(object):
@@ -249,7 +249,7 @@ class Backtest(object):
 
         print 'Winning trades: {0}'.format(self.winners)
         print 'Losing trades: ', self.losers
-        #        print 'Winning percent', self.winners / (self.losers + self.winners)
+        #  print 'Winning percent', self.winners / (self.losers + self.winners)
 
         #  print 'Long trategy:'
         #  print '-------------'

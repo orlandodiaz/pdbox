@@ -1,11 +1,12 @@
-bt_results/
+../bt_results/
 pickles/
 logs/
 screener_results/
 
-strategies/strat_overbought.py
-strategies/strat_oversold.py
+examples/strategies/strat_overbought.py
+examples/strategies/strat_oversold.py
 .idea/
 *.log
 *.pyc
 *.DS_Store
+examples/bt_results*

@@ -1,4 +1,4 @@
-from strategy import *
+from backtest.strategy import *
 import random
 
 

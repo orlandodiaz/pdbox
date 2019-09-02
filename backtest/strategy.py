@@ -1,10 +1,6 @@
-import datetime
-from datetime import datetime as dt
-
-
 class Strategy(object):
 
-    def __init__(self,name):
+    def __init__(self, name):
         self.name = name
         self.description = None
 
@@ -24,4 +20,3 @@ class Strategy(object):
             print "Invalid position type. Use 'short', or 'long'."
         else:
             self.direction = p_type
-

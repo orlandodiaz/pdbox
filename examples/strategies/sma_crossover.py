@@ -1,7 +1,8 @@
-from strategy import *
+from backtest.strategy import *
 
 
 class SMACrossOver(Strategy):
+
     def __init__(self, name):
         super(SMACrossOver, self).__init__(name)
         self.body = 0
@@ -12,9 +13,11 @@ class SMACrossOver(Strategy):
         buy_locations = df.index[
             (df['sma100'] > df['sma400']) &
             (df['sma100'].shift(1) < df['sma400'].shift(1)) &
-            (df['volume'] > 50000) & # 50k not enough. use > 100k to rid of false alarms
+            (df['volume'] > 50000)
+            &  # 50k not enough. use > 100k to rid of false alarms
             # (df['rel_vol_20p'] > 23) & # The higher the market cap the less relative volume there would be
-            (df['rel_vol_100p'] > 5) # The higher the market cap the less relative volume you have to target
+            (df['rel_vol_100p'] > 5
+            )  # The higher the market cap the less relative volume you have to target
         ]
         print buy_locations
 
@@ -22,8 +25,8 @@ class SMACrossOver(Strategy):
 
     @staticmethod
     def check_for_conditions(self, df, ticker, buy_locations):
-            if len(buy_locations) == 0:
-                pass
+        if len(buy_locations) == 0:
+            pass
 
     def sell_algorithm(self, init, ticker, df):
         sell_price = 0

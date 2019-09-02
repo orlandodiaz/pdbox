@@ -3,7 +3,7 @@ It uses a combination of threading and multiprocessing to get the job done
 """
 
 import time
-from data_handling_utils import make_dataframe_from_csv, correct_csv_df, add_columns
+from utils import make_dataframe_from_csv, correct_csv_df, add_columns
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import ProcessPoolExecutor
 from portfolio import Portfolio

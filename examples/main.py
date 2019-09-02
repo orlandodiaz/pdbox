@@ -1,23 +1,11 @@
-from backtest import Backtest
-from portfolio import Portfolio
-from strategies.sma_crossover import SMACrossOver
-from strategies.strat_overbought import OverboughtMorning
+from backtest.backtest import Backtest
+from backtest.portfolio import Portfolio
 from strategies.strat_oversold import OversoldMorning
-from strategies.buy_randomly import BuyRandomly
-import cPickle as pickle
-from backtest_history import get_backtests
-from dataframe_handler import build_dataframes
-from IntrinioPy.intrinio import Intrinio
-from strategies.strat_adx import ADXStrat
+from backtest.backtest_history import get_backtests
+from backtest.dataframe_handler import build_dataframes
 
 if __name__ == '__main__':
 
-    # tickers = ['DPW', 'GROW', 'SGRP', 'CBIO', 'GBR', 'MOSY', 'CREG', 'ONCS','EVEP', 'ISIG', 'CALI']
-
-    #tickers = ['GBR']
-    #tickers = ['SRAX','KOOL','DYSL']
-    # tickers = ['AAPL, MSFT, TWTR']
-    # tickers =  ['ONP', 'CNET', 'RCON', 'CREG']
     tickers = [
         'ONP', 'CNET', 'RCON', 'CREG', 'AMMA', 'SRAX', 'DYSL', 'OPTT', 'KOOL',
         'ONTX', 'CLNT', 'CMLS', 'APHB', 'ISIG', 'CBIO', 'STAF', 'SSI', 'ONCS',
@@ -26,7 +14,7 @@ if __name__ == '__main__':
         'ABIO', 'OPGN', 'USEG', 'TST', 'NURO', 'TTNP', 'DRIO', 'PZRX', 'AKER',
         'YECO'
     ]
-    #intrinio = Intrinio()
+    # intrinio = Intrinio()
     #tickers = intrinio.get_stocks()
 
     # tickers = pickle.load(open("pickles/stocks_less_than_500m.p", "rb"))
@@ -43,6 +31,7 @@ if __name__ == '__main__':
         my_portfolio)  # => weird multidimensional list of stocks
 
     # Load strategies
+
     # strategy = OverboughtMorning('Overbought Morning')
     # strategy = ADXStrat('STRAT ADX')
     strategy = OversoldMorning('Oversold morning')
